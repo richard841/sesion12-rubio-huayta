@@ -1,11 +1,664 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Demo CI/CD Cloud</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perú Mágico | Agencia de Turismo &amp; Aventura</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --accent: #f59e0b;
+      --dark: #0f172a;
+      --slate: #475569;
+      --light: #f8fafc;
+      --white: #ffffff;
+      --radius: 16px;
+      --shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--dark);
+      background-color: var(--light);
+      line-height: 1.6;
+    }
+
+    /* Barra académica CI/CD */
+    .cicd-banner {
+      background: linear-gradient(90deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      text-align: center;
+      font-size: 0.82rem;
+      padding: 8px 16px;
+      letter-spacing: 0.3px;
+    }
+
+    .cicd-banner span {
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    /* Navegación */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--white);
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(6px);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--white);
+      color: var(--dark);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 82vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--white);
+      padding: 40px 24px;
+      background: linear-gradient(rgba(15, 23, 42, 0.45), rgba(15, 23, 42, 0.7)),
+        url('https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.2);
+      border: 1px solid rgba(245, 158, 11, 0.6);
+      color: #fde68a;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: #e2e8f0;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Secciones */
+    section {
+      padding: 80px 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 48px;
+    }
+
+    .section-header span {
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+    }
+
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.3rem;
+      margin: 8px 0 12px;
+    }
+
+    .section-header p {
+      color: var(--slate);
+    }
+
+    /* Filtros */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      background: var(--white);
+      color: var(--slate);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--primary);
+      color: var(--white);
+      border-color: var(--primary);
+    }
+
+    /* Tarjetas de destinos */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.18);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      height: 230px;
+      overflow: hidden;
+      background: #cbd5e1;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-img-wrap img {
+      transform: scale(1.07);
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(15, 23, 42, 0.75);
+      color: var(--white);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    .card-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--slate);
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      color: #d97706;
+      font-weight: 700;
+    }
+
+    .card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--slate);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .price small {
+      font-size: 0.8rem;
+      color: var(--slate);
+      font-weight: 400;
+    }
+
+    /* Experiencias */
+    .features-band {
+      background: var(--white);
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .feature-box {
+      background: var(--light);
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid #e2e8f0;
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(15, 118, 110, 0.12);
+      color: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--radius);
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 8px;
+    }
+
+    .form-group {
+      margin: 16px 0;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-family: inherit;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--dark);
+      color: #cbd5e1;
+      padding: 48px 24px 28px;
+      text-align: center;
+    }
+
+    footer h4 {
+      color: var(--white);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .footer-student {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #1e293b;
+      font-size: 0.88rem;
+      color: #94a3b8;
+    }
+
+    .footer-student strong {
+      color: #34d399;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>¡Mi primer Pipeline con GitHub Actions funciona! </h1>
- <h1>¡Le saluda el estudiante Rubio huayta javier! </h1>
+
+  <!-- Barra de estado del Pipeline -->
+  <div class="cicd-banner">
+    <span>● Pipeline CI/CD con GitHub Actions activo</span> — Desarrollado por el estudiante: <strong>Rubio Huayta Javier</strong>
+  </div>
+
+  <!-- Navegación -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">🧭 PerúMágico</a>
+      <ul class="nav-links">
+        <li><a href="#destinos">Destinos</a></li>
+        <li><a href="#experiencias">Experiencias</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+      <a href="#destinos" class="btn btn-primary">Reservar Viaje</a>
+    </div>
+  </header>
+
+  <!-- Hero Principal -->
+  <div class="hero">
+    <div class="hero-content">
+      <span class="hero-badge">Temporada Turística 2026</span>
+      <h1>Descubre la magia ancestral y natural del Perú</h1>
+      <p>Desde la majestuosa ciudadela de Machu Picchu hasta las dunas doradas de Ica y los paisajes andinos. Vive rutas diseñadas para exploradores.</p>
+      <div class="hero-actions">
+        <a href="#destinos" class="btn btn-primary">Explorar Destinos</a>
+        <a href="#experiencias" class="btn btn-outline">¿Por qué viajar con nosotros?</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Catálogo de Destinos -->
+  <section id="destinos">
+    <div class="section-header">
+      <span>Rutas Destacadas</span>
+      <h2>Destinos Imperdibles</h2>
+      <p>Selecciona tu próxima aventura entre costa, sierra y maravillas arqueológicas.</p>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="filtrar('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="filtrar('sierra', this)">Andes y Cultura</button>
+      <button class="filter-btn" onclick="filtrar('costa', this)">Costa y Desierto</button>
+    </div>
+
+    <div class="grid" id="grid-destinos">
+      <!-- Tarjeta 1 -->
+      <article class="card" data-categoria="sierra">
+        <div class="card-img-wrap">
+          <span class="card-tag">Andes · Cusco</span>
+          <img src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?auto=format&fit=crop&w=800&q=80" alt="Santuario Histórico de Machu Picchu">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span>4 Días / 3 Noches</span>
+            <span class="rating">★ 4.9 (320)</span>
+          </div>
+          <h3>Machu Picchu &amp; Valle Sagrado</h3>
+          <p>Recorre la maravilla del mundo moderno con tren panorámico, guía oficial y visita a Ollantaytambo.</p>
+          <div class="card-footer">
+            <div class="price">$380 <small>/ persona</small></div>
+            <button class="btn btn-primary" onclick="abrirModal('Machu Picchu & Valle Sagrado')">Reservar</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tarjeta 2 -->
+      <article class="card" data-categoria="costa">
+        <div class="card-img-wrap">
+          <span class="card-tag">Costa · Ica</span>
+          <img src="https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?auto=format&fit=crop&w=800&q=80" alt="Oasis de la Huacachina en Ica">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span>2 Días / 1 Noche</span>
+            <span class="rating">★ 4.8 (215)</span>
+          </div>
+          <h3>Oasis Huacachina &amp; Paracas</h3>
+          <p>Aventura en tubulares por el desierto de Ica, sandboarding al atardecer y paseo marítimo por Islas Ballestas.</p>
+          <div class="card-footer">
+            <div class="price">$165 <small>/ persona</small></div>
+            <button class="btn btn-primary" onclick="abrirModal('Oasis Huacachina & Paracas')">Reservar</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- Tarjeta 3 -->
+      <article class="card" data-categoria="sierra">
+        <div class="card-img-wrap">
+          <span class="card-tag">Andes · Vinicunca</span>
+          <img src="https://images.unsplash.com/photo-1531065208531-4536c90c9721?auto=format&fit=crop&w=800&q=80" alt="Montaña de Siete Colores Vinicunca">
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span>Full Day · 5,200 m</span>
+            <span class="rating">★ 4.9 (190)</span>
+          </div>
+          <h3>Montaña de Siete Colores</h3>
+          <p>Caminata guiada hacia la cumbre arcoíris de Vinicunca rodeada de nevados y fauna altoandina.</p>
+          <div class="card-footer">
+            <div class="price">$95 <small>/ persona</small></div>
+            <button class="btn btn-primary" onclick="abrirModal('Montaña de Siete Colores')">Reservar</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <div class="features-band" id="experiencias">
+    <section>
+      <div class="section-header">
+        <span>Garantía de Calidad</span>
+        <h2>Viaja sin preocupaciones</h2>
+        <p>Nos encargamos de cada detalle logístico para que disfrutes al máximo tu experiencia.</p>
+      </div>
+      <div class="grid">
+        <div class="feature-box">
+          <div class="feature-icon">🛡️</div>
+          <h3>Guías Certificados</h3>
+          <p>Especialistas locales bilingües con amplia experiencia en historia, naturaleza y primeros auxilios.</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">🚐</div>
+          <h3>Transporte Turístico</h3>
+          <p>Unidades modernas monitoreadas por GPS con recojo puntual directamente desde tu alojamiento.</p>
+        </div>
+        <div class="feature-box">
+          <div class="feature-icon">⚡</div>
+          <h3>Confirmación Inmediata</h3>
+          <p>Reserva en línea con flexibilidad de reprogramación y atención personalizada las 24 horas.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal de Reserva -->
+  <div class="modal" id="modal-reserva">
+    <div class="modal-content">
+      <h3 id="modal-titulo">Reservar Paquete</h3>
+      <p style="color: var(--slate); font-size: 0.9rem;">Completa tus datos para recibir el itinerario detallado.</p>
+      <form onsubmit="confirmarReserva(event)">
+        <div class="form-group">
+          <label for="nombre">Nombre completo</label>
+          <input type="text" id="nombre" placeholder="Ej. Javier Rubio" required>
+        </div>
+        <div class="form-group">
+          <label for="fecha">Fecha tentativa de viaje</label>
+          <input type="date" id="fecha" required>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="filter-btn" onclick="cerrarModal()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar Solicitud</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="contacto">
+    <h4>🧭 PerúMágico — Turismo &amp; Aventura</h4>
+    <p>Explorando los mejores destinos del Perú con tecnología en la nube.</p>
+    <div class="footer-student">
+      ¡Mi primer Pipeline con GitHub Actions funciona! · Desplegado automáticamente por <strong>Rubio Huayta Javier</strong>
+    </div>
+  </footer>
+
+  <script>
+    function filtrar(categoria, boton) {
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      boton.classList.add('active');
+
+      document.querySelectorAll('#grid-destinos .card').forEach(card => {
+        if (categoria === 'todos' || card.dataset.categoria === categoria) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function abrirModal(destino) {
+      document.getElementById('modal-titulo').textContent = 'Reservar: ' + destino;
+      document.getElementById('modal-reserva').classList.add('open');
+    }
+
+    function cerrarModal() {
+      document.getElementById('modal-reserva').classList.remove('open');
+    }
+
+    function confirmarReserva(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      alert('¡Gracias, ' + nombre + '! Tu solicitud de viaje ha sido registrada.');
+      cerrarModal();
+      e.target.reset();
+    }
+  </script>
 </body>
 </html>
