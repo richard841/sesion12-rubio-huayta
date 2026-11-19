@@ -1,0 +1,14 @@
+name: CI-Pipeline
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  verificar-proyecto:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+      - name: Verifica archivos del proyecto
+        run: echo "Verificando archivos"
